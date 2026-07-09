@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 SC2 PUSH — Pre-PUSH Readiness Checklist</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0f1115; color: #e8eaed; padding: 32px 20px; line-height: 1.5; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 18px; }
+  h1 { font-size: 24px; letter-spacing: 0.5px; }
+  .sub { color: #9aa0a6; font-size: 14px; margin-top: 4px; }
+  .window { color: #f5b301; font-weight: 600; }
+
+  .tabs { display: flex; gap: 8px; justify-content: center; margin: 18px 0 22px; }
+  .tab { background: #1a1d24; border: 1px solid #2a2e38; color: #9aa0a6; padding: 10px 24px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .tab.active { color: #0f1115; background: #f5b301; border-color: #f5b301; }
+
+  .overall { background: #1a1d24; border: 1px solid #2a2e38; border-radius: 12px; padding: 16px 20px; margin-bottom: 22px; }
+  .overall .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .overall .top .lbl { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: #9aa0a6; }
+  .overall .top .pct { font-size: 26px; font-weight: 700; color: #34c759; }
+  .bar { height: 10px; background: #2a2e38; border-radius: 6px; overflow: hidden; }
+  .bar > div { height: 100%; width: 0%; background: linear-gradient(90deg,#34c759,#5bd97a); transition: width .3s; }
+
+  section { background: #1a1d24; border: 1px solid #2a2e38; border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+  .shead { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  h2 { font-size: 15px; border-left: 3px solid #f5b301; padding-left: 10px; flex: 1; }
+  .scount { font-size: 13px; color: #9aa0a6; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .minibar { height: 5px; background: #2a2e38; border-radius: 4px; overflow: hidden; margin: 8px 0 12px; }
+  .minibar > div { height: 100%; width: 0%; background: #f5b301; transition: width .3s; }
+
+  .row { display: flex; align-items: flex-start; gap: 11px; padding: 7px 4px; border-radius: 8px; }
+  .row:hover { background: #22262f; }
+  input[type=checkbox] { appearance: none; -webkit-appearance: none; min-width: 20px; height: 20px; margin-top: 2px;
+    border: 2px solid #4b5563; border-radius: 5px; cursor: pointer; position: relative; }
+  input[type=checkbox]:checked { background: #34c759; border-color: #34c759; }
+  input[type=checkbox]:checked::after { content: "✓"; position: absolute; top: -3px; left: 3px; color: #0f1115; font-size: 15px; font-weight: 700; }
+  .txtwrap { flex: 1; }
+  .itxt { font-size: 15px; outline: none; border-radius: 4px; padding: 1px 3px; }
+  .itxt:focus { background: #0f1115; box-shadow: 0 0 0 1px #f5b301; }
+  .hint { display: block; font-size: 12px; color: #6b7280; margin-top: 1px; outline: none; border-radius: 4px; padding: 0 3px; }
+  .hint:focus { background: #0f1115; box-shadow: 0 0 0 1px #4b5563; color: #9aa0a6; }
+  .done .itxt { color: #6b7280; text-decoration: line-through; }
+  .del { color: #4b5563; cursor: pointer; font-size: 16px; padding: 0 4px; opacity: 0; }
+  .row:hover .del { opacity: 1; }
+  .del:hover { color: #ff6b6b; }
+  .additem { background: transparent; border: 1px dashed #2a2e38; color: #6b7280; width: 100%;
+    padding: 7px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-top: 6px; }
+  .additem:hover { border-color: #f5b301; color: #f5b301; }
+
+  .actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+  .btn { background: transparent; border: 1px solid #2a2e38; color: #9aa0a6; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; }
+  .btn:hover { border-color: #4b5563; color: #e8eaed; }
+  .hidden { display: none; }
+  .editnote { text-align:center; color:#6b7280; font-size:12px; margin-bottom:14px; }
+  footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 22px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Pre-PUSH Readiness Checklist</h1>
+    <div class="sub">2026 SC2 100K+ PUSH · <span class="window">Locked & loaded before July 16</span></div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="pro" onclick="switchTab('pro')">Professional</button>
+    <button class="tab" data-tab="personal" onclick="switchTab('personal')">Personal</button>
+  </div>
+
+  <div class="editnote">Tap any line to edit it. Use “+ Add item” to add your own. Everything saves automatically.</div>
+
+  <div class="overall">
+    <div class="top"><span class="lbl" id="olbl">Professional Readiness</span><span class="pct" id="pct">0%</span></div>
+    <div class="bar"><div id="obar"></div></div>
+  </div>
+
+  <div id="sections"></div>
+
+  <div class="actions">
+    <button class="btn" onclick="addSection()">+ Add section</button>
+    <button class="btn" onclick="resetTab()">Reset this tab</button>
+  </div>
+  <footer>You don't rise to the level of your goals — you fall to the level of your systems. Build them before Day 1.</footer>
+</div>
+
+<script>
+const KEY = "push2026_precheck_v2";
+
+const SEED = {
+  pro: [
+    { title: "The 4 Revenue Engines", items: [
+      ["All 94 SC appt slots confirmed & blocked on calendar (Jul 16–Aug 3)", "This is your capacity ceiling — verify nothing got double-booked."],
+      ["Pre-appointment prep sheet ready for each booked appt", "Name, need, history, angle before you walk in."],
+      ["Avg-order target of $925 posted where you'll see it daily", "The middle blueprint dies if CPO drifts to $850."],
+      ["Maricopa Home & Garden — booth confirmed, both shifts staffed", "Target: $8K–$12K across 2 shifts."],
+      ["Hunters Extravaganza — booth confirmed, both shifts staffed", "Target: $5K–$8K across 2 shifts."],
+      ["Business-gift target list built (names + est. order size + close window)", "The $10K–$30K promo lever. Turn 'I anticipate' into named buyers."],
+      ["Business-gift promo offer defined (what makes NOW the time to buy)", "The reason a client orders in July instead of November."],
+    ]},
+    { title: "Systems & Operations", items: [
+      ["Daily calling blocks scheduled around appt grid", "Protect the gaps — that's where the PUSH is won or lost."],
+      ["Assistant workflow defined (booking, confirming, list pulls)", "Who does what, and by when each day."],
+      ["Driver / route plan set for appt and show days", "No wasted windshield time between appointments."],
+      ["Lead management + pipeline tracker set up", "One source of truth for who's next."],
+      ["Confirmation text templates ready", "Protects your show rate — the completion lever."],
+      ["Follow-up + no-sale follow-up system in place", "Every no-sale is a scheduled callback, not a dead end."],
+      ["Daily scorecard ready to fill", "Slots run, close %, CPO, revenue — tracked every night."],
+      ["End-of-day review process locked in", "5 minutes: what won, what drifted, tomorrow's #1 move."],
+    ]},
+    { title: "Logistics & Materials", items: [
+      ["Sample kit(s) fully stocked & inspected", "Every piece the demo needs, sharp and clean."],
+      ["Order forms / iPad / payment method tested", "Never lose a close to a tech or paperwork fumble."],
+      ["Demo supplies restocked (rope, leather, penny, etc.)", "Run the full demo before Day 1 — no missing props."],
+      ["Promo / business-gift materials printed & ready", "Sell sheets, gift order forms, signage."],
+      ["Full PUSH schedule locked and shared with team", "Everyone knows where you are every day."],
+      ["Shift assignments confirmed with partners", "Both Maricopa and Hunters shifts have people committed."],
+      ["Car, gas, and route ready for show days", "Reliable transport for the whole window."],
+      ["Business cards + gift capture sheets stocked", "Ready to capture on the spot at shows."],
+    ]},
+  ],
+  personal: [
+    { title: "Job 1: Defend the Anchors", items: [
+      ["Set up meal prep service account", ""],
+      ["Place first meal prep order (arrives before Day 1)", ""],
+      ["Buy emergency car protein (bars/shakes) — restock weekly", ""],
+      ["Configure BRICK + strip phone of all media/dopamine apps", ""],
+      ["Confirm morning routine locked: no phone, grounding (2m), breathwork (1m), visualization/priming (15m), Productivity Planner journaling (10m)", "Non-negotiable, full version."],
+      ["Confirm workout standard: full workout OR 20-min incline walk", ""],
+      ["Place ONE full day off/week on the calendar (wake +1hr, massage)", ""],
+      ["Book standing weekly massage for the day off", ""],
+      ["Confirm nutrition plan for stacked days — plan: ______", "Fill in your stacked-day plan."],
+    ]},
+    { title: "Job 2: Clear the Deck (zero catch-up before Day 1)", items: [
+      ["Brain-dump every open personal loop onto one list", ""],
+      ["Triage each into: DO before Day 1 / DELEGATE / DELETE-DEFER", ""],
+      ["Handle all 'DO before Day 1' items — deck at zero", ""],
+      ["Pre-decide PUSH wardrobe (set outfits, laid out)", ""],
+      ["Automate/batch recurring errands (groceries, pharmacy, etc.)", ""],
+      ["Personal delegation — Wife owns: ______", "Name it."],
+      ["Personal delegation — Outsourced (cleaning/errands): ______", "Name it."],
+      ["Personal delegation — Deferred past PUSH: ______", "Name it."],
+      ["Communicate every delegation OUT LOUD before Day 1", ""],
+      ["Map known personal logistics during PUSH (appointments, family, events)", ""],
+    ]},
+    { title: "Job 3: Protect the Relationship", items: [
+      ["Sit with wife — pre-book EVERY PUSH-period date night on shared calendar", ""],
+      ["Build a low-energy fallback for each date night (heavy-day version)", ""],
+      ["Define 'showing up for her on a heavy day' (15-min real check-in min)", ""],
+    ]},
+    { title: "Schedule: The Container", items: [
+      ["Place anchors + day off on the grid FIRST", ""],
+      ["Place date nights SECOND", ""],
+      ["Build business schedule around them (not the reverse)", ""],
+    ]},
+    { title: "Personal Add-Ons (Do / Delegate / Delete / Defer)", items: [
+      ["Tires changed — Tesla", ""],
+      ["House cleaning set up", ""],
+      ["Bills paid", ""],
+      ["Haircut scheduled", ""],
+      ["Groceries scheduled", ""],
+      ["PS5 cable gone", ""],
+      ["Steam Deck gone", ""],
+      ["Post job posting for Driver", ""],
+    ]},
+    { title: "Decisions to Lock (answer to close prep)", items: [
+      ["PUSH start date: 07/16/2026 ✓ LOCKED", "Everything keys off this — anchors and date nights go on the grid first."],
+      ["Nutrition-on-stacked-days plan: ______", ""],
+      ["Meal prep + BRICK completion dates: ______", ""],
+    ]},
+  ],
+};
+
+let model, active = "pro";
+function load() {
+  try { model = JSON.parse(localStorage.getItem(KEY)); } catch(e) { model = null; }
+  if (!model || !model.pro || !model.personal) {
+    model = { pro: seed(SEED.pro), personal: seed(SEED.personal) };
+    save();
+  }
+}
+function seed(arr){ return arr.map(s => ({ title: s.title, items: s.items.map(i => ({ text: i[0], hint: i[1]||"", done: false })) })); }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(model)); } catch(e){} }
+
+function switchTab(t){
+  active = t;
+  document.querySelectorAll(".tab").forEach(el => el.classList.toggle("active", el.dataset.tab === t));
+  document.getElementById("olbl").textContent = (t === "pro" ? "Professional" : "Personal") + " Readiness";
+  render();
+}
+
+function render(){
+  const root = document.getElementById("sections");
+  root.innerHTML = "";
+  const secs = model[active];
+  secs.forEach((sec, si) => {
+    const el = document.createElement("section");
+    const done = sec.items.filter(i => i.done).length;
+    const total = sec.items.length || 1;
+    const head = document.createElement("div");
+    head.className = "shead";
+    head.innerHTML = `<h2 class="itxt" contenteditable="true" data-t="title" data-s="${si}">${esc(sec.title)}</h2><span class="scount">${done}/${sec.items.length}</span>`;
+    el.appendChild(head);
+    const mb = document.createElement("div"); mb.className = "minibar";
+    mb.innerHTML = `<div style="width:${done/total*100}%"></div>`;
+    el.appendChild(mb);
+    sec.items.forEach((it, ii) => {
+      const row = document.createElement("div");
+      row.className = "row" + (it.done ? " done" : "");
+      const cb = document.createElement("input");
+      cb.type = "checkbox"; cb.checked = it.done;
+      cb.onchange = () => { it.done = cb.checked; save(); render(); };
+      const tw = document.createElement("div"); tw.className = "txtwrap";
+      const tx = document.createElement("div");
+      tx.className = "itxt"; tx.contentEditable = "true"; tx.textContent = it.text;
+      tx.onblur = () => { it.text = tx.textContent; save(); };
+      const hn = document.createElement("div");
+      hn.className = "hint"; hn.contentEditable = "true";
+      hn.textContent = it.hint; hn.dataset.ph = "add a note…";
+      hn.onblur = () => { it.hint = hn.textContent; save(); };
+      tw.appendChild(tx); tw.appendChild(hn);
+      const del = document.createElement("span");
+      del.className = "del"; del.textContent = "×"; del.title = "Delete";
+      del.onclick = () => { sec.items.splice(ii,1); save(); render(); };
+      row.appendChild(cb); row.appendChild(tw); row.appendChild(del);
+      el.appendChild(row);
+    });
+    const add = document.createElement("button");
+    add.className = "additem"; add.textContent = "+ Add item";
+    add.onclick = () => { sec.items.push({text:"New item", hint:"", done:false}); save(); render(); };
+    el.appendChild(add);
+    root.appendChild(el);
+  });
+  updateOverall();
+}
+function updateOverall(){
+  const secs = model[active];
+  let t=0,d=0;
+  secs.forEach(s => s.items.forEach(i => { t++; if(i.done) d++; }));
+  const pct = t ? Math.round(d/t*100) : 0;
+  document.getElementById("pct").textContent = pct + "%";
+  document.getElementById("obar").style.width = pct + "%";
+}
+function addSection(){ model[active].push({title:"New Section", items:[]}); save(); render(); }
+function resetTab(){
+  if(confirm("Reset the "+(active==="pro"?"Professional":"Personal")+" tab to defaults? Your edits here will be lost.")){
+    model[active] = seed(SEED[active]); save(); render();
+  }
+}
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+// save title edits (delegated)
+document.getElementById("sections").addEventListener("blur", e => {
+  if(e.target.dataset && e.target.dataset.t === "title"){
+    model[active][+e.target.dataset.s].title = e.target.textContent; save();
+  }
+}, true);
+
+load(); render();
+</script>
+</body>
+</html>

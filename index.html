@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUSH Hub</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0f1115; color: #e8eaed; padding: 40px 20px; line-height: 1.5;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  header { text-align: center; margin-bottom: 34px; }
+  h1 { font-size: 30px; letter-spacing: 0.5px; }
+  h1 .gold { color: #f5b301; }
+  .sub { color: #9aa0a6; font-size: 14px; margin-top: 6px; }
+
+  .push { background: #1a1d24; border: 1px solid #2a2e38; border-radius: 14px; padding: 22px 24px; margin-bottom: 22px; }
+  .push.active { border-top: 3px solid #f5b301; }
+  .push.past { opacity: 0.75; }
+  .phead { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+  .push h2 { font-size: 19px; }
+  .badge { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; font-weight: 700; }
+  .badge.live { background: #f5b301; color: #0f1115; }
+  .badge.done { background: #2a2e38; color: #9aa0a6; }
+  .pwindow { color: #9aa0a6; font-size: 13px; margin-bottom: 16px; }
+
+  .docs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  a.doc { display: block; background: #22262f; border: 1px solid #2a2e38; border-radius: 10px;
+    padding: 14px 16px; text-decoration: none; color: #e8eaed; transition: border-color .15s; }
+  a.doc:hover { border-color: #f5b301; }
+  .doc .dname { font-weight: 700; font-size: 15px; }
+  .doc .ddesc { font-size: 12px; color: #9aa0a6; margin-top: 3px; }
+  .doc .arrow { color: #f5b301; font-weight: 700; }
+
+  footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 36px; }
+  footer a { color: #9aa0a6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>PUSH <span class="gold">Hub</span></h1>
+    <div class="sub">Every PUSH. One place. Any device.</div>
+  </header>
+
+  <!-- ============================================================
+       TO ADD A NEW PUSH:
+       1. Create a new folder (e.g. 2027-sc3/) and drop the HTML docs in it.
+       2. Copy the <div class="push"> block below, update the title,
+          window dates, and doc links.
+       3. Move the "live" badge to the new push; change the old one
+          to <span class="badge done">Complete</span> and add class="push past".
+       4. Commit + push. See README.md for the full playbook.
+       ============================================================ -->
+
+  <div class="push active">
+    <div class="phead">
+      <h2>2026 SC2 100K+ PUSH</h2>
+      <span class="badge live">Live</span>
+    </div>
+    <div class="pwindow">July 16 – August 3, 2026 · 94 SC appointment slots</div>
+    <div class="docs">
+      <a class="doc" href="2026-sc2/blueprint.html">
+        <div class="dname">Sales Blueprint <span class="arrow">→</span></div>
+        <div class="ddesc">The 3 scenarios, 4 revenue engines, and live tracker</div>
+      </a>
+      <a class="doc" href="2026-sc2/precheck.html">
+        <div class="dname">Pre-PUSH Readiness Checklist <span class="arrow">→</span></div>
+        <div class="ddesc">Professional + personal prep, checked off before Day 1</div>
+      </a>
+    </div>
+  </div>
+
+  <footer>Unwavering faith and extraordinary effort until the final second.</footer>
+</div>
+</body>
+</html>
