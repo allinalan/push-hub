@@ -53,19 +53,12 @@
   .btnreset { background: transparent; border: 1px solid #2a2e38; color: #9aa0a6; padding: 7px 14px;
     border-radius: 8px; font-size: 12px; cursor: pointer; }
   .btnreset:hover { border-color: #4b5563; color: #e8eaed; }
-
-  .sct { width: 100%; border-collapse: collapse; background: transparent; }
-  .sct th, .sct td { padding: 8px 6px; border-bottom: 1px solid #2a2e38; font-size: 13px; background: transparent; }
-  .sct th { color: #9aa0a6; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
-  .sct tr:last-child td { border-bottom: none; }
-  .sct td.num, .sct th.num { text-align: right; }
-  .sct input { width: 100%; max-width: 120px; background: #0f1115; border: 1px solid #2a2e38; color: #e8eaed;
-    border-radius: 8px; padding: 8px 10px; font-size: 15px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
-  .sct input:focus { outline: none; border-color: #f5b301; }
-  .sct .mid-col { font-weight: 700; }
-  .btnapply { background: #f5b301; border: 1px solid #f5b301; color: #0f1115; padding: 11px 22px;
-    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
-  .btnapply:hover { filter: brightness(1.08); }
+  .rowdel { color: #4b5563; cursor: pointer; font-size: 16px; padding: 0 4px; }
+  .rowdel:hover { color: #ff6b6b; }
+  td.delcell { width: 26px; padding-left: 4px; padding-right: 6px; }
+  .addbtn { background: transparent; border: 1px dashed #2a2e38; color: #6b7280; width: 100%;
+    padding: 8px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-top: 10px; }
+  .addbtn:hover { border-color: #f5b301; color: #f5b301; }
 
   .tabs { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; }
   .tab { background: #1a1d24; border: 1px solid #2a2e38; color: #9aa0a6; padding: 10px 24px;
@@ -81,11 +74,23 @@
   .igrid input:focus { outline: none; border-color: #f5b301; }
   .derived { margin-top: 14px; padding-top: 12px; border-top: 1px solid #2a2e38; font-size: 14px; color: #9aa0a6; }
   .derived b { color: #f5b301; font-size: 18px; }
-  .res b { color: #e8eaed; }
-  .big { color: #34c759 !important; font-size: 16px; }
   .capacity-ok { color: #34c759; font-weight: 600; }
   .capacity-over { color: #ff6b6b; font-weight: 600; }
   .pnote { font-size: 12px; color: #6b7280; margin-top: 8px; }
+
+  .sct { width: 100%; border-collapse: collapse; background: transparent; }
+  .sct th, .sct td { padding: 8px 6px; border-bottom: 1px solid #2a2e38; font-size: 13px; background: transparent; }
+  .sct th { color: #9aa0a6; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+  .sct tr:last-child td { border-bottom: none; }
+  .sct td.num, .sct th.num { text-align: right; }
+  .sct input { width: 100%; max-width: 120px; background: #0f1115; border: 1px solid #2a2e38; color: #e8eaed;
+    border-radius: 8px; padding: 8px 10px; font-size: 15px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+  .sct input:focus { outline: none; border-color: #f5b301; }
+  .sct input.lname { max-width: none; text-align: left; }
+  .sct .mid-col { font-weight: 700; }
+  .btnapply { background: #f5b301; border: 1px solid #f5b301; color: #0f1115; padding: 11px 22px;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btnapply:hover { filter: brightness(1.08); }
 
   footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
   @media (max-width: 640px) { .scenarios { grid-template-columns: 1fr; } }
@@ -105,72 +110,50 @@
   </div>
 
   <div id="view-blueprint">
-  <div class="editnote">Tap any number or line to edit it — everything saves automatically on this device. Totals and the three cards recalculate from the engine table.</div>
+  <div class="editnote">Tap any number or line to edit it — everything saves automatically on this device. Totals and the three cards recalculate as you type. Add or remove levers here or in the Planner.</div>
   <div class="scenarios">
     <div class="card floor">
       <div class="label">Conservative Floor</div>
-      <div class="val" id="c_floor">$80,728</div>
+      <div class="val" id="c_floor">—</div>
       <div class="note" contenteditable="true" data-k="n1">85% / 85% / $850</div>
     </div>
     <div class="card mid">
       <div class="label">Realistic Middle</div>
-      <div class="val" id="c_mid">$103,071</div>
+      <div class="val" id="c_mid">—</div>
       <div class="note" contenteditable="true" data-k="n2">87.5% / 87.5% / $925</div>
     </div>
     <div class="card max">
       <div class="label">Everything Goes Right</div>
-      <div class="val" id="c_max">$126,140</div>
+      <div class="val" id="c_max">—</div>
       <div class="note" contenteditable="true" data-k="n3">90% / 90% / $1,000</div>
     </div>
   </div>
 
-  <h2>Full Breakdown by Engine</h2>
+  <h2>Full Breakdown by Lever</h2>
   <table>
     <thead>
       <tr>
-        <th>Engine</th>
+        <th>Lever</th>
         <th class="num">Conservative</th>
         <th class="num">Middle</th>
         <th class="num">Max</th>
+        <th></th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td contenteditable="true" data-k="e1n">Appointments (94 slots)</td>
-        <td class="num" contenteditable="true" data-k="e1c">$57,728</td>
-        <td class="num mid-col" contenteditable="true" data-k="e1m">$66,571</td>
-        <td class="num" contenteditable="true" data-k="e1x">$76,140</td>
-      </tr>
-      <tr>
-        <td contenteditable="true" data-k="e2n">Maricopa Home &amp; Garden (2 shifts)</td>
-        <td class="num" contenteditable="true" data-k="e2c">$8,000</td>
-        <td class="num mid-col" contenteditable="true" data-k="e2m">$10,000</td>
-        <td class="num" contenteditable="true" data-k="e2x">$12,000</td>
-      </tr>
-      <tr>
-        <td contenteditable="true" data-k="e3n">Hunters Extravaganza (2 shifts)</td>
-        <td class="num" contenteditable="true" data-k="e3c">$5,000</td>
-        <td class="num mid-col" contenteditable="true" data-k="e3m">$6,500</td>
-        <td class="num" contenteditable="true" data-k="e3x">$8,000</td>
-      </tr>
-      <tr>
-        <td contenteditable="true" data-k="e4n">Sale Promo (business gifts)</td>
-        <td class="num" contenteditable="true" data-k="e4c">$10,000</td>
-        <td class="num mid-col" contenteditable="true" data-k="e4m">$20,000</td>
-        <td class="num" contenteditable="true" data-k="e4x">$30,000</td>
-      </tr>
-    </tbody>
+    <tbody id="engBody"></tbody>
     <tfoot>
       <tr>
         <td>TOTAL</td>
-        <td class="num" id="tot_c">$80,728</td>
-        <td class="num mid-col" id="tot_m">$103,071</td>
-        <td class="num" id="tot_x">$126,140</td>
+        <td class="num" id="tot_c">—</td>
+        <td class="num mid-col" id="tot_m">—</td>
+        <td class="num" id="tot_x">—</td>
+        <td></td>
       </tr>
     </tfoot>
   </table>
+  <button class="addbtn" onclick="bpAddEngine()">+ Add lever</button>
 
-  <h2>The 3 Appointment Levers</h2>
+  <h2>The Appointment Sub-Levers</h2>
   <div class="levers">
     <ul>
       <li><b>Completion rate</b> — <span contenteditable="true" data-k="lv1s">% of your 94 slots that actually run. 85% → 90%.</span></li>
@@ -198,10 +181,10 @@
       <tr><td contenteditable="true" data-k="t3n">Sales closed</td><td class="num" contenteditable="true" data-k="t3t">72</td><td class="num fill" contenteditable="true" data-k="a3"></td></tr>
       <tr><td contenteditable="true" data-k="t4n">Close %</td><td class="num" contenteditable="true" data-k="t4t">87.5%</td><td class="num fill" contenteditable="true" data-k="a4"></td></tr>
       <tr><td contenteditable="true" data-k="t5n">Avg order (CPO)</td><td class="num" contenteditable="true" data-k="t5t">$925</td><td class="num fill" contenteditable="true" data-k="a5"></td></tr>
-      <tr><td contenteditable="true" data-k="t6n">Appt revenue</td><td class="num" contenteditable="true" data-k="t6t">$66,571</td><td class="num fill" contenteditable="true" data-k="a6"></td></tr>
-      <tr><td contenteditable="true" data-k="t7n">Shift revenue</td><td class="num" contenteditable="true" data-k="t7t">$16,500</td><td class="num fill" contenteditable="true" data-k="a7"></td></tr>
-      <tr><td contenteditable="true" data-k="t8n">Promo revenue</td><td class="num" contenteditable="true" data-k="t8t">$20,000</td><td class="num fill" contenteditable="true" data-k="a8"></td></tr>
-      <tr><td><b>TOTAL SHIPPED</b></td><td class="num" style="font-weight:700" contenteditable="true" data-k="t9t">$103,071</td><td class="num fill" style="font-weight:700" id="a9"></td></tr>
+    </tbody>
+    <tbody id="revBody"></tbody>
+    <tbody>
+      <tr><td><b>TOTAL SHIPPED</b></td><td class="num" style="font-weight:700" id="tot_tgt">—</td><td class="num fill" style="font-weight:700" id="tot_act"></td></tr>
     </tbody>
   </table>
   <div class="bpactions">
@@ -210,24 +193,33 @@
   </div><!-- /view-blueprint -->
 
   <div id="view-planner" class="hidden">
-    <h2>Scenario Levers</h2>
+    <h2>The Appointment Lever</h2>
     <div class="panel">
       <div class="igrid" style="margin-bottom: 14px;">
         <label>SC Appt Slots Available<input id="p_slots" type="number" inputmode="numeric" min="0" step="1"></label>
       </div>
       <table class="sct">
         <thead>
-          <tr><th>Lever</th><th class="num">Conservative</th><th class="num mid-col">Middle (auto)</th><th class="num">Goes Right</th></tr>
+          <tr><th>Sub-Lever</th><th class="num">Conservative</th><th class="num mid-col">Middle (auto)</th><th class="num">Goes Right</th></tr>
         </thead>
         <tbody>
           <tr><td>Completion %</td><td class="num"><input id="p_comp_c" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td><td class="num mid-col" id="m_comp">—</td><td class="num"><input id="p_comp_x" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td></tr>
           <tr><td>Close %</td><td class="num"><input id="p_close_c" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td><td class="num mid-col" id="m_close">—</td><td class="num"><input id="p_close_x" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td></tr>
           <tr><td>Average Order / CPO ($)</td><td class="num"><input id="p_cpo_c" type="number" inputmode="decimal" min="1" step="25"></td><td class="num mid-col" id="m_cpo">—</td><td class="num"><input id="p_cpo_x" type="number" inputmode="decimal" min="1" step="25"></td></tr>
-          <tr><td>Maricopa Home &amp; Garden ($)</td><td class="num"><input id="p_mari_c" type="number" inputmode="decimal" min="0" step="500"></td><td class="num mid-col" id="m_mari">—</td><td class="num"><input id="p_mari_x" type="number" inputmode="decimal" min="0" step="500"></td></tr>
-          <tr><td>Hunters Extravaganza ($)</td><td class="num"><input id="p_hunt_c" type="number" inputmode="decimal" min="0" step="500"></td><td class="num mid-col" id="m_hunt">—</td><td class="num"><input id="p_hunt_x" type="number" inputmode="decimal" min="0" step="500"></td></tr>
-          <tr><td>Sale Promo ($)</td><td class="num"><input id="p_promo_c" type="number" inputmode="decimal" min="0" step="500"></td><td class="num mid-col" id="m_promo">—</td><td class="num"><input id="p_promo_x" type="number" inputmode="decimal" min="0" step="500"></td></tr>
         </tbody>
       </table>
+      <div class="derived">Appointment revenue = Slots × Completion% × Close% × CPO: <b id="p_apptrev">—</b> <span style="font-size:12px;">(middle case)</span></div>
+    </div>
+
+    <h2>Additional Revenue Levers</h2>
+    <div class="panel">
+      <table class="sct">
+        <thead>
+          <tr><th>Lever (tap name to rename)</th><th class="num">Conservative</th><th class="num mid-col">Middle (auto)</th><th class="num">Goes Right</th><th></th></tr>
+        </thead>
+        <tbody id="levBody"></tbody>
+      </table>
+      <button class="addbtn" onclick="addLever()">+ Add lever</button>
     </div>
 
     <h2>Projected Scenarios</h2>
@@ -235,11 +227,7 @@
       <thead>
         <tr><th></th><th class="num">Conservative</th><th class="num">Middle</th><th class="num">Goes Right</th></tr>
       </thead>
-      <tbody>
-        <tr><td>Appointment Revenue</td><td class="num" id="s_appt_c">—</td><td class="num mid-col" id="s_appt_m">—</td><td class="num" id="s_appt_x">—</td></tr>
-        <tr><td>Shifts (Maricopa + Hunters)</td><td class="num" id="s_shift_c">—</td><td class="num mid-col" id="s_shift_m">—</td><td class="num" id="s_shift_x">—</td></tr>
-        <tr><td>Sale Promo</td><td class="num" id="s_promo_c">—</td><td class="num mid-col" id="s_promo_m">—</td><td class="num" id="s_promo_x">—</td></tr>
-      </tbody>
+      <tbody id="projBody"></tbody>
       <tfoot>
         <tr><td>TOTAL</td><td class="num" id="s_tot_c">—</td><td class="num mid-col" id="s_tot_m">—</td><td class="num" id="s_tot_x">—</td></tr>
       </tfoot>
@@ -257,7 +245,7 @@
         <label>Calls / Hour<input id="p_cph" type="number" inputmode="decimal" min="1" step="1"></label>
         <label>Booked / Hour<input id="p_bph" type="number" inputmode="decimal" min="0.1" step="0.5"></label>
       </div>
-      <div class="derived">Shifts + promo cover <b id="p_cover">—</b> of the goal (middle case) · Appointment Goal: <b id="p_apptgoal">—</b></div>
+      <div class="derived">Other levers cover <b id="p_cover">—</b> of the goal (middle case) · Appointment Goal: <b id="p_apptgoal">—</b></div>
     </div>
 
     <h2>The Math (to hit your goal, at middle levers)</h2>
@@ -266,7 +254,7 @@
         <tr><td>Orders Needed</td><td class="num"><b id="r_orders">—</b></td></tr>
         <tr><td>Orders / Day</td><td class="num" id="r_ordersday">—</td></tr>
         <tr><td>Appts Completed Needed</td><td class="num"><b id="r_completed">—</b></td></tr>
-        <tr><td>Appts Booked Needed</td><td class="num"><b class="big" id="r_booked">—</b></td></tr>
+        <tr><td>Appts Booked Needed</td><td class="num"><b class="mid-col" id="r_booked">—</b></td></tr>
         <tr><td>Appts / Day (booked)</td><td class="num" id="r_apptsday">—</td></tr>
         <tr><td>Capacity Check</td><td class="num" id="r_capacity">—</td></tr>
       </tbody>
@@ -284,81 +272,165 @@
         <tr><td>Pre-PUSH Calls / Day</td><td class="num"><b id="r_precallsday">—</b></td><td class="num" id="r_prehoursday">—</td></tr>
       </tbody>
     </table>
-    <div class="pnote">The Realistic Middle is always the midpoint of your Conservative and Goes-Right levers. Appointment revenue = Slots × Completion% × Close% × CPO. Goal math is the PUSH Planner sheet at middle levers: Orders = Goal ÷ CPO · Completed = Orders ÷ Close% · Booked = Completed ÷ Completion% · Calls = Booked × Calls/hr ÷ Booked/hr, half made pre-PUSH. Inputs save automatically on this device; "Apply" overwrites the Blueprint tab's numbers.</div>
+    <div class="pnote">The Appointment Lever's revenue = Slots × Completion% × Close% × CPO, from its three sub-levers. Every lever's Realistic Middle is the midpoint of Conservative and Goes-Right. Add, remove, or rename the additional levers to match your PUSH. Goal math runs the PUSH Planner sheet at middle levers: Orders = Goal ÷ CPO · Completed = Orders ÷ Close% · Booked = Completed ÷ Completion% · Calls = Booked × Calls/hr ÷ Booked/hr, half made pre-PUSH. Inputs save automatically on this device; "Apply" overwrites the Blueprint tab.</div>
   </div><!-- /view-planner -->
 
   <footer>Unwavering faith and extraordinary effort until the final second. · Built for the 2026 SC2 100K+ PUSH</footer>
 </div>
 
 <script>
-const P_KEY = "push2026_planner_v2";
-const P_DEFAULTS = { goal: 100000, days: 15, slots: 94, predays: 4, cph: 25, bph: 2,
-  comp_c: 85, comp_x: 90, close_c: 85, close_x: 90, cpo_c: 850, cpo_x: 1000,
-  mari_c: 8000, mari_x: 12000, hunt_c: 5000, hunt_x: 8000, promo_c: 10000, promo_x: 30000 };
-const P_FIELDS = Object.keys(P_DEFAULTS);
+// ================= shared helpers =================
+function $(id){ return document.getElementById(id); }
+function set(id, txt){ $(id).textContent = txt; }
+function money(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
+function fmtPct(n){ return (n % 1 === 0) ? String(n) : String(Math.round(n * 10) / 10); }
+function parseMoney(s){
+  if (!s) return null;
+  const m = String(s).replace(/,/g, "").match(/-?\d+(\.\d+)?\s*[kK]?/);
+  if (!m) return null;
+  let n = parseFloat(m[0]);
+  if (/[kK]\s*$/.test(m[0])) n *= 1000;
+  return isNaN(n) ? null : n;
+}
+function mid(a, b){ return (a + b) / 2; }
 
 function switchView(v){
   document.querySelectorAll(".tab").forEach(el => el.classList.toggle("active", el.dataset.view === v));
-  document.getElementById("view-blueprint").classList.toggle("hidden", v !== "blueprint");
-  document.getElementById("view-planner").classList.toggle("hidden", v !== "planner");
+  $("view-blueprint").classList.toggle("hidden", v !== "blueprint");
+  $("view-planner").classList.toggle("hidden", v !== "planner");
 }
 
+// ================= PLANNER =================
+const P_KEY = "push2026_planner_v3";
+const P_STATIC = { goal: 100000, days: 15, slots: 94, predays: 4, cph: 25, bph: 2,
+  comp_c: 85, comp_x: 90, close_c: 85, close_x: 90, cpo_c: 850, cpo_x: 1000 };
+const P_STATIC_FIELDS = Object.keys(P_STATIC);
+const DEFAULT_LEVERS = [
+  { name: "Maricopa Home & Garden (2 shifts)", c: 8000, x: 12000 },
+  { name: "Hunters Extravaganza (2 shifts)", c: 5000, x: 8000 },
+  { name: "Sale Promo (business gifts)", c: 10000, x: 30000 },
+];
+let pState = null;
+
 function pLoad(){
-  let saved = {};
-  try { saved = JSON.parse(localStorage.getItem(P_KEY)) || {}; } catch(e) {}
-  if (!Object.keys(saved).length){
-    // first run on this device: carry shared fields over from the old planner storage
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(P_KEY)); } catch(e) {}
+  if (!saved){
     try {
-      const v1 = JSON.parse(localStorage.getItem("push2026_planner_v1")) || {};
-      ["goal","days","slots","predays","cph","bph"].forEach(f => { if (v1[f] !== undefined) saved[f] = v1[f]; });
+      const v2 = JSON.parse(localStorage.getItem("push2026_planner_v2"));
+      if (v2){
+        saved = {};
+        P_STATIC_FIELDS.forEach(f => { if (v2[f] !== undefined) saved[f] = v2[f]; });
+        saved.levers = [
+          { name: "Maricopa Home & Garden (2 shifts)", c: v2.mari_c !== undefined ? v2.mari_c : 8000, x: v2.mari_x !== undefined ? v2.mari_x : 12000 },
+          { name: "Hunters Extravaganza (2 shifts)", c: v2.hunt_c !== undefined ? v2.hunt_c : 5000, x: v2.hunt_x !== undefined ? v2.hunt_x : 8000 },
+          { name: "Sale Promo (business gifts)", c: v2.promo_c !== undefined ? v2.promo_c : 10000, x: v2.promo_x !== undefined ? v2.promo_x : 30000 },
+        ];
+      } else {
+        const v1 = JSON.parse(localStorage.getItem("push2026_planner_v1"));
+        if (v1){
+          saved = {};
+          ["goal","days","slots","predays","cph","bph"].forEach(f => { if (v1[f] !== undefined) saved[f] = v1[f]; });
+        }
+      }
     } catch(e) {}
   }
-  P_FIELDS.forEach(f => {
-    const el = document.getElementById("p_" + f);
-    el.value = (saved[f] !== undefined && saved[f] !== null) ? saved[f] : P_DEFAULTS[f];
+  pState = Object.assign({}, P_STATIC, saved || {});
+  if (!Array.isArray(pState.levers)) pState.levers = DEFAULT_LEVERS.map(l => Object.assign({}, l));
+  P_STATIC_FIELDS.forEach(f => {
+    const el = $("p_" + f);
+    el.value = pState[f];
     el.addEventListener("input", pCalc);
   });
 }
-function pSave(vals){ try { localStorage.setItem(P_KEY, JSON.stringify(vals)); } catch(e) {} }
+function pSave(){ try { localStorage.setItem(P_KEY, JSON.stringify(pState)); } catch(e) {} }
 
-function money(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
-function set(id, txt){ document.getElementById(id).textContent = txt; }
-function fmtPct(n){ return (n % 1 === 0) ? String(n) : String(Math.round(n * 10) / 10); }
+function renderLevers(){
+  const tb = $("levBody");
+  tb.innerHTML = "";
+  pState.levers.forEach((lv, i) => {
+    const tr = document.createElement("tr");
 
-function pVals(){
-  const v = {};
-  P_FIELDS.forEach(f => { v[f] = parseFloat(document.getElementById("p_" + f).value) || 0; });
-  const mid = (a, b) => (a + b) / 2;
-  const m = { comp: mid(v.comp_c, v.comp_x), close: mid(v.close_c, v.close_x), cpo: mid(v.cpo_c, v.cpo_x),
-              mari: mid(v.mari_c, v.mari_x), hunt: mid(v.hunt_c, v.hunt_x), promo: mid(v.promo_c, v.promo_x) };
+    const tdN = document.createElement("td");
+    const nameIn = document.createElement("input");
+    nameIn.type = "text"; nameIn.className = "lname"; nameIn.value = lv.name;
+    nameIn.addEventListener("input", () => { lv.name = nameIn.value; pSave(); pCalc(); });
+    tdN.appendChild(nameIn);
+    tr.appendChild(tdN);
+
+    const numCell = (field) => {
+      const td = document.createElement("td"); td.className = "num";
+      const inp = document.createElement("input");
+      inp.type = "number"; inp.min = "0"; inp.step = "500"; inp.inputMode = "decimal";
+      inp.value = lv[field];
+      inp.addEventListener("input", () => { lv[field] = parseFloat(inp.value) || 0; pSave(); pCalc(); });
+      td.appendChild(inp);
+      return td;
+    };
+    tr.appendChild(numCell("c"));
+
+    const tdM = document.createElement("td");
+    tdM.className = "num mid-col"; tdM.id = "m_lv" + i; tdM.textContent = "—";
+    tr.appendChild(tdM);
+
+    tr.appendChild(numCell("x"));
+
+    const tdD = document.createElement("td"); tdD.className = "delcell";
+    const del = document.createElement("span");
+    del.className = "rowdel"; del.textContent = "×"; del.title = "Remove lever";
+    del.onclick = () => { pState.levers.splice(i, 1); pSave(); renderLevers(); pCalc(); };
+    tdD.appendChild(del);
+    tr.appendChild(tdD);
+
+    tb.appendChild(tr);
+  });
+}
+function addLever(){
+  pState.levers.push({ name: "New Lever", c: 0, x: 0 });
+  pSave(); renderLevers(); pCalc();
+}
+
+function pScenarios(){
+  const v = pState;
+  const m = { comp: mid(v.comp_c, v.comp_x), close: mid(v.close_c, v.close_x), cpo: mid(v.cpo_c, v.cpo_x) };
   const apptRev = (comp, close, cpo) => v.slots * comp / 100 * close / 100 * cpo;
-  const appt  = { c: apptRev(v.comp_c, v.close_c, v.cpo_c), m: apptRev(m.comp, m.close, m.cpo), x: apptRev(v.comp_x, v.close_x, v.cpo_x) };
-  const shift = { c: v.mari_c + v.hunt_c, m: m.mari + m.hunt, x: v.mari_x + v.hunt_x };
-  const promo = { c: v.promo_c, m: m.promo, x: v.promo_x };
-  const tot   = { c: appt.c + shift.c + promo.c, m: appt.m + shift.m + promo.m, x: appt.x + shift.x + promo.x };
-  return { v, m, appt, shift, promo, tot };
+  const appt = { c: apptRev(v.comp_c, v.close_c, v.cpo_c), m: apptRev(m.comp, m.close, m.cpo), x: apptRev(v.comp_x, v.close_x, v.cpo_x) };
+  const lev = { c: 0, m: 0, x: 0 };
+  v.levers.forEach(l => { lev.c += l.c; lev.m += mid(l.c, l.x); lev.x += l.x; });
+  const tot = { c: appt.c + lev.c, m: appt.m + lev.m, x: appt.x + lev.x };
+  return { m, appt, lev, tot };
 }
 
 function pCalc(){
-  const { v, m, appt, shift, promo, tot } = pVals();
-  pSave(v);
+  P_STATIC_FIELDS.forEach(f => { pState[f] = parseFloat($("p_" + f).value) || 0; });
+  pSave();
+  const s = pScenarios();
 
-  // auto middles in the lever table
-  set("m_comp", fmtPct(m.comp) + "%"); set("m_close", fmtPct(m.close) + "%"); set("m_cpo", money(m.cpo));
-  set("m_mari", money(m.mari)); set("m_hunt", money(m.hunt)); set("m_promo", money(m.promo));
+  set("m_comp", fmtPct(s.m.comp) + "%"); set("m_close", fmtPct(s.m.close) + "%"); set("m_cpo", money(s.m.cpo));
+  set("p_apptrev", money(s.appt.m));
+  pState.levers.forEach((lv, i) => { const el = $("m_lv" + i); if (el) el.textContent = money(mid(lv.c, lv.x)); });
 
-  // projected scenario table
-  ["c","m","x"].forEach(s => {
-    set("s_appt_" + s, money(appt[s])); set("s_shift_" + s, money(shift[s]));
-    set("s_promo_" + s, money(promo[s])); set("s_tot_" + s, money(tot[s]));
-  });
+  const tb = $("projBody");
+  tb.innerHTML = "";
+  const projRow = (label, c, m2, x) => {
+    const tr = document.createElement("tr");
+    const tdL = document.createElement("td"); tdL.textContent = label; tr.appendChild(tdL);
+    [[c, "num"], [m2, "num mid-col"], [x, "num"]].forEach(([val, cls]) => {
+      const td = document.createElement("td"); td.className = cls; td.textContent = money(val); tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  };
+  projRow("Appointments (" + pState.slots + " slots)", s.appt.c, s.appt.m, s.appt.x);
+  pState.levers.forEach(lv => projRow(lv.name || "Untitled lever", lv.c, mid(lv.c, lv.x), lv.x));
+  set("s_tot_c", money(s.tot.c)); set("s_tot_m", money(s.tot.m)); set("s_tot_x", money(s.tot.x));
 
   // goal-backwards math at middle levers
-  const apptGoal = Math.max(0, v.goal - shift.m - promo.m);
-  set("p_cover", money(shift.m + promo.m));
+  const apptGoal = Math.max(0, pState.goal - s.lev.m);
+  set("p_cover", money(s.lev.m));
   set("p_apptgoal", money(apptGoal));
 
-  const ok = m.cpo > 0 && m.close > 0 && m.comp > 0 && v.days > 0 && v.cph > 0 && v.bph > 0 && v.predays > 0;
+  const v = pState;
+  const ok = s.m.cpo > 0 && s.m.close > 0 && s.m.comp > 0 && v.days > 0 && v.cph > 0 && v.bph > 0 && v.predays > 0;
   if (!ok || apptGoal <= 0){
     ["r_orders","r_ordersday","r_completed","r_booked","r_apptsday","r_capacity",
      "r_calls","r_hours","r_precalls","r_prehours","r_pushcalls","r_pushhours",
@@ -366,9 +438,9 @@ function pCalc(){
     return;
   }
 
-  const orders = apptGoal / m.cpo;
-  const completed = orders / (m.close / 100);
-  const booked = completed / (m.comp / 100);
+  const orders = apptGoal / s.m.cpo;
+  const completed = orders / (s.m.close / 100);
+  const booked = completed / (s.m.comp / 100);
   const calls = booked * v.cph / v.bph;
   const preCalls = calls / 2;
   const pushCalls = calls - preCalls;
@@ -379,7 +451,7 @@ function pCalc(){
   set("r_booked", Math.ceil(booked) + "  (" + booked.toFixed(1) + ")");
   set("r_apptsday", (booked / v.days).toFixed(1));
 
-  const cap = document.getElementById("r_capacity");
+  const cap = $("r_capacity");
   const need = Math.ceil(booked);
   if (v.slots >= need){
     cap.textContent = need + " needed · " + v.slots + " available ✓";
@@ -400,105 +472,193 @@ function pCalc(){
 }
 
 function applyToBlueprint(){
-  if (!confirm("Overwrite the Blueprint tab's numbers with these scenario projections? Your hand-edits there will be replaced.")) return;
-  const { v, m, appt, shift, promo, tot } = pVals();
-  const put = (k, txt) => { const el = bpEl(k); if (el){ el.textContent = txt; bpData[k] = txt; } };
+  if (!confirm("Overwrite the Blueprint tab's numbers with these scenario projections? Your hand-edits there will be replaced (tracker actuals are kept).")) return;
+  const s = pScenarios();
+  const oldActs = {};
+  (bpState.engines || []).forEach(en => { if (en.act) oldActs[en.name] = en.act; });
 
-  // engine table (cards + totals recompute from it)
-  put("e1n", "Appointments (" + v.slots + " slots)");
-  put("e1c", money(appt.c)); put("e1m", money(appt.m)); put("e1x", money(appt.x));
-  put("e2c", money(v.mari_c)); put("e2m", money(m.mari)); put("e2x", money(v.mari_x));
-  put("e3c", money(v.hunt_c)); put("e3m", money(m.hunt)); put("e3x", money(v.hunt_x));
-  put("e4c", money(v.promo_c)); put("e4m", money(m.promo)); put("e4x", money(v.promo_x));
+  const apptName = "Appointments (" + pState.slots + " slots)";
+  const engines = [{
+    name: apptName, c: money(s.appt.c), m: money(s.appt.m), x: money(s.appt.x),
+    tgt: money(s.appt.m), act: oldActs[apptName] || ""
+  }];
+  pState.levers.forEach(lv => {
+    const m2 = mid(lv.c, lv.x);
+    engines.push({ name: lv.name || "Untitled lever", c: money(lv.c), m: money(m2), x: money(lv.x),
+      tgt: money(m2), act: oldActs[lv.name] || "" });
+  });
+  bpState.engines = engines;
 
-  // scenario card subtitles: completion / close / CPO
-  put("n1", fmtPct(v.comp_c) + "% / " + fmtPct(v.close_c) + "% / " + money(v.cpo_c));
-  put("n2", fmtPct(m.comp) + "% / " + fmtPct(m.close) + "% / " + money(m.cpo));
-  put("n3", fmtPct(v.comp_x) + "% / " + fmtPct(v.close_x) + "% / " + money(v.cpo_x));
+  const cells = bpState.cells;
+  cells.n1 = fmtPct(pState.comp_c) + "% / " + fmtPct(pState.close_c) + "% / " + money(pState.cpo_c);
+  cells.n2 = fmtPct(s.m.comp) + "% / " + fmtPct(s.m.close) + "% / " + money(s.m.cpo);
+  cells.n3 = fmtPct(pState.comp_x) + "% / " + fmtPct(pState.close_x) + "% / " + money(pState.cpo_x);
+  cells.lv1s = "% of your " + pState.slots + " slots that actually run. " + fmtPct(pState.comp_c) + "% → " + fmtPct(pState.comp_x) + "%.";
+  cells.lv2s = "% of run appointments that buy. " + fmtPct(pState.close_c) + "% → " + fmtPct(pState.close_x) + "%.";
+  cells.lv3s = money(pState.cpo_c) + " → " + money(pState.cpo_x) + ".";
 
-  // lever bullet text
-  put("lv1s", "% of your " + v.slots + " slots that actually run. " + fmtPct(v.comp_c) + "% → " + fmtPct(v.comp_x) + "%.");
-  put("lv2s", "% of run appointments that buy. " + fmtPct(v.close_c) + "% → " + fmtPct(v.close_x) + "%.");
-  put("lv3s", money(v.cpo_c) + " → " + money(v.cpo_x) + ".");
+  const runM = pState.slots * s.m.comp / 100, closedM = runM * s.m.close / 100;
+  cells.t1n = "Slots run / " + pState.slots;
+  cells.t1t = String(Math.round(runM));
+  cells.t2t = fmtPct(s.m.comp) + "%";
+  cells.t3t = String(Math.round(closedM));
+  cells.t4t = fmtPct(s.m.close) + "%";
+  cells.t5t = money(s.m.cpo);
 
-  // live tracker targets = the middle case
-  const runM = v.slots * m.comp / 100, closedM = runM * m.close / 100;
-  put("t1n", "Slots run / " + v.slots);
-  put("t1t", String(Math.round(runM)));
-  put("t2t", fmtPct(m.comp) + "%");
-  put("t3t", String(Math.round(closedM)));
-  put("t4t", fmtPct(m.close) + "%");
-  put("t5t", money(m.cpo));
-  put("t6t", money(appt.m));
-  put("t7t", money(shift.m));
-  put("t8t", money(promo.m));
-  put("t9t", money(tot.m));
-
-  try { localStorage.setItem(BP_KEY, JSON.stringify(bpData)); } catch(e) {}
-  bpRecalc();
+  bpSave(); bpRender();
   switchView("blueprint");
 }
 
-pLoad(); pCalc();
+// ================= BLUEPRINT =================
+const BP_KEY = "push2026_blueprint_v2";
+const DEFAULT_ENGINES = [
+  { name: "Appointments (94 slots)", c: "$57,728", m: "$66,571", x: "$76,140", tgt: "$66,571", act: "" },
+  { name: "Maricopa Home & Garden (2 shifts)", c: "$8,000", m: "$10,000", x: "$12,000", tgt: "$10,000", act: "" },
+  { name: "Hunters Extravaganza (2 shifts)", c: "$5,000", m: "$6,500", x: "$8,000", tgt: "$6,500", act: "" },
+  { name: "Sale Promo (business gifts)", c: "$10,000", m: "$20,000", x: "$30,000", tgt: "$20,000", act: "" },
+];
+let bpState = null;
 
-// ---- Editable Blueprint: tap-to-edit with auto-recalculated totals ----
-const BP_KEY = "push2026_blueprint_v1";
-let bpData = {};
-try { bpData = JSON.parse(localStorage.getItem(BP_KEY)) || {}; } catch(e) {}
-
-function bpEl(k){ return document.querySelector('#view-blueprint [data-k="' + k + '"]'); }
-
-function parseMoney(s){
-  if (!s) return null;
-  const m = String(s).replace(/,/g, "").match(/-?\d+(\.\d+)?\s*[kK]?/);
-  if (!m) return null;
-  let n = parseFloat(m[0]);
-  if (/[kK]\s*$/.test(m[0])) n *= 1000;
-  return isNaN(n) ? null : n;
-}
-function bpMoney(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
-
-function bpRecalc(){
-  // engine table column totals drive the tfoot row AND the three scenario cards
-  [["c", "tot_c", "c_floor"], ["m", "tot_m", "c_mid"], ["x", "tot_x", "c_max"]].forEach(([col, totId, cardId]) => {
-    let sum = 0, any = false;
-    for (let r = 1; r <= 4; r++){
-      const v = parseMoney(bpEl("e" + r + col).textContent);
-      if (v !== null){ sum += v; any = true; }
+function bpLoad(){
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(BP_KEY)); } catch(e) {}
+  if (saved && Array.isArray(saved.engines)){
+    bpState = saved;
+    if (!bpState.cells) bpState.cells = {};
+    return;
+  }
+  bpState = { v: 2, cells: {}, engines: DEFAULT_ENGINES.map(e => Object.assign({}, e)) };
+  // migrate from the old flat-key storage if it exists
+  try {
+    const old = JSON.parse(localStorage.getItem("push2026_blueprint_v1"));
+    if (old){
+      const map = [["e1", 0], ["e2", 1], ["e3", 2], ["e4", 3]];
+      map.forEach(([pre, i]) => {
+        if (old[pre + "n"] !== undefined) bpState.engines[i].name = old[pre + "n"];
+        ["c", "m", "x"].forEach(f => { if (old[pre + f] !== undefined) bpState.engines[i][f] = old[pre + f]; });
+      });
+      if (old.t6t !== undefined) bpState.engines[0].tgt = old.t6t;
+      if (old.a6 !== undefined) bpState.engines[0].act = old.a6;
+      if (old.t8t !== undefined) bpState.engines[3].tgt = old.t8t;
+      if (old.a8 !== undefined) bpState.engines[3].act = old.a8;
+      ["n1","n2","n3","lv1s","lv2s","lv3s","lvnote","t1n","t2n","t3n","t4n","t5n",
+       "t1t","t2t","t3t","t4t","t5t","a1","a2","a3","a4","a5"].forEach(k => {
+        if (old[k] !== undefined) bpState.cells[k] = old[k];
+      });
+      bpSave();
     }
-    const txt = any ? bpMoney(sum) : "—";
-    document.getElementById(totId).textContent = txt;
-    document.getElementById(cardId).textContent = txt;
+  } catch(e) {}
+}
+function bpSave(){ try { localStorage.setItem(BP_KEY, JSON.stringify(bpState)); } catch(e) {} }
+
+function bpRender(){
+  // lever breakdown table
+  const eb = $("engBody");
+  eb.innerHTML = "";
+  bpState.engines.forEach((en, i) => {
+    const tr = document.createElement("tr");
+    const cell = (field, cls) => {
+      const td = document.createElement("td");
+      if (cls) td.className = cls;
+      td.contentEditable = "true";
+      td.dataset.e = i + ":" + field;
+      td.textContent = en[field];
+      return td;
+    };
+    tr.appendChild(cell("name", ""));
+    tr.appendChild(cell("c", "num"));
+    tr.appendChild(cell("m", "num mid-col"));
+    tr.appendChild(cell("x", "num"));
+    const tdD = document.createElement("td"); tdD.className = "delcell";
+    const del = document.createElement("span");
+    del.className = "rowdel"; del.textContent = "×"; del.title = "Remove lever";
+    del.onclick = () => {
+      if (confirm('Remove the "' + en.name + '" lever from the Blueprint?')){
+        bpState.engines.splice(i, 1); bpSave(); bpRender();
+      }
+    };
+    tdD.appendChild(del);
+    tr.appendChild(tdD);
+    eb.appendChild(tr);
   });
-  // tracker TOTAL SHIPPED actual = appt + shift + promo revenue actuals
-  let total = 0, filled = false;
-  ["a6", "a7", "a8"].forEach(k => {
-    const v = parseMoney(bpEl(k).textContent);
-    if (v !== null){ total += v; filled = true; }
+
+  // tracker revenue rows (one per lever)
+  const rb = $("revBody");
+  rb.innerHTML = "";
+  bpState.engines.forEach((en, i) => {
+    const tr = document.createElement("tr");
+    const tdL = document.createElement("td"); tdL.textContent = en.name; tr.appendChild(tdL);
+    const tdT = document.createElement("td"); tdT.className = "num";
+    tdT.contentEditable = "true"; tdT.dataset.e = i + ":tgt"; tdT.textContent = en.tgt;
+    tr.appendChild(tdT);
+    const tdA = document.createElement("td"); tdA.className = "num fill";
+    tdA.contentEditable = "true"; tdA.dataset.e = i + ":act"; tdA.textContent = en.act;
+    tr.appendChild(tdA);
+    rb.appendChild(tr);
   });
-  document.getElementById("a9").textContent = filled ? bpMoney(total) : "";
+
+  // static editable cells
+  Object.keys(bpState.cells).forEach(k => {
+    const el = document.querySelector('#view-blueprint [data-k="' + k + '"]');
+    if (el) el.textContent = bpState.cells[k];
+  });
+
+  bpTotals();
 }
 
-document.querySelectorAll("#view-blueprint [data-k]").forEach(el => {
-  if (bpData[el.dataset.k] !== undefined) el.textContent = bpData[el.dataset.k];
-});
+function bpTotals(){
+  [["c", "tot_c", "c_floor"], ["m", "tot_m", "c_mid"], ["x", "tot_x", "c_max"]].forEach(([f, totId, cardId]) => {
+    let sum = 0, any = false;
+    bpState.engines.forEach(en => {
+      const v = parseMoney(en[f]);
+      if (v !== null){ sum += v; any = true; }
+    });
+    const txt = any ? money(sum) : "—";
+    set(totId, txt); set(cardId, txt);
+  });
+  let tgtSum = 0, tgtAny = false, actSum = 0, actAny = false;
+  bpState.engines.forEach(en => {
+    const t = parseMoney(en.tgt); if (t !== null){ tgtSum += t; tgtAny = true; }
+    const a = parseMoney(en.act); if (a !== null){ actSum += a; actAny = true; }
+  });
+  set("tot_tgt", tgtAny ? money(tgtSum) : "—");
+  set("tot_act", actAny ? money(actSum) : "");
+}
+
+function bpAddEngine(){
+  bpState.engines.push({ name: "New lever", c: "$0", m: "$0", x: "$0", tgt: "$0", act: "" });
+  bpSave(); bpRender();
+}
+
 document.getElementById("view-blueprint").addEventListener("blur", e => {
-  const k = e.target.dataset && e.target.dataset.k;
-  if (!k) return;
-  if (!e.target.textContent.trim()) e.target.textContent = "";
-  bpData[k] = e.target.textContent;
-  try { localStorage.setItem(BP_KEY, JSON.stringify(bpData)); } catch(e2) {}
-  bpRecalc();
+  const t = e.target;
+  if (!t.dataset) return;
+  if (t.dataset.e){
+    const parts = t.dataset.e.split(":");
+    const i = parseInt(parts[0], 10), f = parts[1];
+    if (!t.textContent.trim()) t.textContent = "";
+    if (bpState.engines[i]){
+      bpState.engines[i][f] = t.textContent;
+      if (f === "name") bpRender(); // keep tracker row labels in sync
+      bpSave(); bpTotals();
+    }
+  } else if (t.dataset.k){
+    if (!t.textContent.trim()) t.textContent = "";
+    bpState.cells[t.dataset.k] = t.textContent;
+    bpSave();
+  }
 }, true);
 
 function bpReset(){
   if (confirm("Reset all Blueprint edits back to the original numbers? (Planner inputs are kept.)")){
-    try { localStorage.removeItem(BP_KEY); } catch(e) {}
+    try { localStorage.removeItem(BP_KEY); localStorage.removeItem("push2026_blueprint_v1"); } catch(e) {}
     location.reload();
   }
 }
 
-bpRecalc();
+// ================= init =================
+pLoad(); renderLevers(); pCalc();
+bpLoad(); bpRender();
 </script>
 </body>
 </html>
