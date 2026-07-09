@@ -29,7 +29,9 @@ this README.
 
 1. **Make a folder** named `<year>-<campaign>` (e.g. `2027-sc3/`) in the repo
    root and drop the PUSH's HTML docs in it. Self-contained HTML only —
-   inline CSS/JS, no external dependencies.
+   inline CSS/JS, no external dependencies. Give each doc a home button at
+   the top (copy the `a.home` styles + `← PUSH Hub` link from an existing
+   doc) so every page links back to the hub.
 2. **Edit `index.html`**: copy the `<div class="push">` block (there's a
    `TO ADD A NEW PUSH` comment above it with instructions), update the title,
    dates, and doc links. Move the `Live` badge to the new PUSH and mark the
