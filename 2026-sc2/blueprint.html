@@ -54,6 +54,19 @@
     border-radius: 8px; font-size: 12px; cursor: pointer; }
   .btnreset:hover { border-color: #4b5563; color: #e8eaed; }
 
+  .sct { width: 100%; border-collapse: collapse; background: transparent; }
+  .sct th, .sct td { padding: 8px 6px; border-bottom: 1px solid #2a2e38; font-size: 13px; background: transparent; }
+  .sct th { color: #9aa0a6; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; }
+  .sct tr:last-child td { border-bottom: none; }
+  .sct td.num, .sct th.num { text-align: right; }
+  .sct input { width: 100%; max-width: 120px; background: #0f1115; border: 1px solid #2a2e38; color: #e8eaed;
+    border-radius: 8px; padding: 8px 10px; font-size: 15px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+  .sct input:focus { outline: none; border-color: #f5b301; }
+  .sct .mid-col { font-weight: 700; }
+  .btnapply { background: #f5b301; border: 1px solid #f5b301; color: #0f1115; padding: 11px 22px;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; }
+  .btnapply:hover { filter: brightness(1.08); }
+
   .tabs { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; }
   .tab { background: #1a1d24; border: 1px solid #2a2e38; color: #9aa0a6; padding: 10px 24px;
     border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
@@ -160,9 +173,9 @@
   <h2>The 3 Appointment Levers</h2>
   <div class="levers">
     <ul>
-      <li contenteditable="true" data-k="lv1"><b>Completion rate</b> — % of your 94 slots that actually run. 85% → 90%.</li>
-      <li contenteditable="true" data-k="lv2"><b>Close rate</b> — % of run appointments that buy. 85% → 90%.</li>
-      <li contenteditable="true" data-k="lv3"><b>Average order (CPO)</b> — $850 → $1,000.</li>
+      <li><b>Completion rate</b> — <span contenteditable="true" data-k="lv1s">% of your 94 slots that actually run. 85% → 90%.</span></li>
+      <li><b>Close rate</b> — <span contenteditable="true" data-k="lv2s">% of run appointments that buy. 85% → 90%.</span></li>
+      <li><b>Average order (CPO)</b> — <span contenteditable="true" data-k="lv3s">$850 → $1,000.</span></li>
     </ul>
     <div style="margin-top:10px; font-size:13px; color:#9aa0a6;" contenteditable="true" data-k="lvnote">
       The middle case ($103K) clears $100K on <b style="color:#34c759;">average</b> standards — not luck.
@@ -197,31 +210,57 @@
   </div><!-- /view-blueprint -->
 
   <div id="view-planner" class="hidden">
-    <h2>The Goal</h2>
+    <h2>Scenario Levers</h2>
+    <div class="panel">
+      <div class="igrid" style="margin-bottom: 14px;">
+        <label>SC Appt Slots Available<input id="p_slots" type="number" inputmode="numeric" min="0" step="1"></label>
+      </div>
+      <table class="sct">
+        <thead>
+          <tr><th>Lever</th><th class="num">Conservative</th><th class="num mid-col">Middle (auto)</th><th class="num">Goes Right</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Completion %</td><td class="num"><input id="p_comp_c" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td><td class="num mid-col" id="m_comp">—</td><td class="num"><input id="p_comp_x" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td></tr>
+          <tr><td>Close %</td><td class="num"><input id="p_close_c" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td><td class="num mid-col" id="m_close">—</td><td class="num"><input id="p_close_x" type="number" inputmode="decimal" min="1" max="100" step="0.5"></td></tr>
+          <tr><td>Average Order / CPO ($)</td><td class="num"><input id="p_cpo_c" type="number" inputmode="decimal" min="1" step="25"></td><td class="num mid-col" id="m_cpo">—</td><td class="num"><input id="p_cpo_x" type="number" inputmode="decimal" min="1" step="25"></td></tr>
+          <tr><td>Maricopa Home &amp; Garden ($)</td><td class="num"><input id="p_mari_c" type="number" inputmode="decimal" min="0" step="500"></td><td class="num mid-col" id="m_mari">—</td><td class="num"><input id="p_mari_x" type="number" inputmode="decimal" min="0" step="500"></td></tr>
+          <tr><td>Hunters Extravaganza ($)</td><td class="num"><input id="p_hunt_c" type="number" inputmode="decimal" min="0" step="500"></td><td class="num mid-col" id="m_hunt">—</td><td class="num"><input id="p_hunt_x" type="number" inputmode="decimal" min="0" step="500"></td></tr>
+          <tr><td>Sale Promo ($)</td><td class="num"><input id="p_promo_c" type="number" inputmode="decimal" min="0" step="500"></td><td class="num mid-col" id="m_promo">—</td><td class="num"><input id="p_promo_x" type="number" inputmode="decimal" min="0" step="500"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Projected Scenarios</h2>
+    <table class="res">
+      <thead>
+        <tr><th></th><th class="num">Conservative</th><th class="num">Middle</th><th class="num">Goes Right</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Appointment Revenue</td><td class="num" id="s_appt_c">—</td><td class="num mid-col" id="s_appt_m">—</td><td class="num" id="s_appt_x">—</td></tr>
+        <tr><td>Shifts (Maricopa + Hunters)</td><td class="num" id="s_shift_c">—</td><td class="num mid-col" id="s_shift_m">—</td><td class="num" id="s_shift_x">—</td></tr>
+        <tr><td>Sale Promo</td><td class="num" id="s_promo_c">—</td><td class="num mid-col" id="s_promo_m">—</td><td class="num" id="s_promo_x">—</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td>TOTAL</td><td class="num" id="s_tot_c">—</td><td class="num mid-col" id="s_tot_m">—</td><td class="num" id="s_tot_x">—</td></tr>
+      </tfoot>
+    </table>
+    <div class="bpactions" style="margin-top: 14px;">
+      <button class="btnapply" onclick="applyToBlueprint()">Apply these scenarios to the Blueprint →</button>
+    </div>
+
+    <h2>The Goal &amp; Work Rates</h2>
     <div class="panel">
       <div class="igrid">
         <label>Total PUSH Goal ($)<input id="p_goal" type="number" inputmode="decimal" min="0" step="1000"></label>
-        <label>Shift Revenue ($)<input id="p_shift" type="number" inputmode="decimal" min="0" step="500"></label>
-        <label>Promo Revenue ($)<input id="p_promo" type="number" inputmode="decimal" min="0" step="500"></label>
-      </div>
-      <div class="derived">Appointment Goal (what appointments must produce): <b id="p_apptgoal">—</b></div>
-    </div>
-
-    <h2>The Levers</h2>
-    <div class="panel">
-      <div class="igrid">
-        <label>Average Order / CPO ($)<input id="p_cpo" type="number" inputmode="decimal" min="1" step="25"></label>
-        <label>Closing Ratio (%)<input id="p_close" type="number" inputmode="decimal" min="1" max="100" step="0.5"></label>
-        <label>Completion Ratio (%)<input id="p_comp" type="number" inputmode="decimal" min="1" max="100" step="0.5"></label>
         <label>Days Working<input id="p_days" type="number" inputmode="numeric" min="1" step="1"></label>
-        <label>SC Appt Slots Available<input id="p_slots" type="number" inputmode="numeric" min="0" step="1"></label>
         <label>Pre-PUSH Call Days<input id="p_predays" type="number" inputmode="numeric" min="1" step="1"></label>
         <label>Calls / Hour<input id="p_cph" type="number" inputmode="decimal" min="1" step="1"></label>
         <label>Booked / Hour<input id="p_bph" type="number" inputmode="decimal" min="0.1" step="0.5"></label>
       </div>
+      <div class="derived">Shifts + promo cover <b id="p_cover">—</b> of the goal (middle case) · Appointment Goal: <b id="p_apptgoal">—</b></div>
     </div>
 
-    <h2>The Math</h2>
+    <h2>The Math (to hit your goal, at middle levers)</h2>
     <table class="res">
       <tbody>
         <tr><td>Orders Needed</td><td class="num"><b id="r_orders">—</b></td></tr>
@@ -245,15 +284,17 @@
         <tr><td>Pre-PUSH Calls / Day</td><td class="num"><b id="r_precallsday">—</b></td><td class="num" id="r_prehoursday">—</td></tr>
       </tbody>
     </table>
-    <div class="pnote">Same math as the PUSH Planner sheet: Orders = Goal ÷ CPO · Completed = Orders ÷ Close% · Booked = Completed ÷ Completion% · Calls = Booked × Calls/hr ÷ Booked/hr, half of them made pre-PUSH. Your inputs save automatically on this device.</div>
+    <div class="pnote">The Realistic Middle is always the midpoint of your Conservative and Goes-Right levers. Appointment revenue = Slots × Completion% × Close% × CPO. Goal math is the PUSH Planner sheet at middle levers: Orders = Goal ÷ CPO · Completed = Orders ÷ Close% · Booked = Completed ÷ Completion% · Calls = Booked × Calls/hr ÷ Booked/hr, half made pre-PUSH. Inputs save automatically on this device; "Apply" overwrites the Blueprint tab's numbers.</div>
   </div><!-- /view-planner -->
 
   <footer>Unwavering faith and extraordinary effort until the final second. · Built for the 2026 SC2 100K+ PUSH</footer>
 </div>
 
 <script>
-const P_KEY = "push2026_planner_v1";
-const P_DEFAULTS = { goal: 100000, shift: 16500, promo: 20000, cpo: 925, close: 87.5, comp: 87.5, days: 15, slots: 94, predays: 4, cph: 25, bph: 2 };
+const P_KEY = "push2026_planner_v2";
+const P_DEFAULTS = { goal: 100000, days: 15, slots: 94, predays: 4, cph: 25, bph: 2,
+  comp_c: 85, comp_x: 90, close_c: 85, close_x: 90, cpo_c: 850, cpo_x: 1000,
+  mari_c: 8000, mari_x: 12000, hunt_c: 5000, hunt_x: 8000, promo_c: 10000, promo_x: 30000 };
 const P_FIELDS = Object.keys(P_DEFAULTS);
 
 function switchView(v){
@@ -265,6 +306,13 @@ function switchView(v){
 function pLoad(){
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(P_KEY)) || {}; } catch(e) {}
+  if (!Object.keys(saved).length){
+    // first run on this device: carry shared fields over from the old planner storage
+    try {
+      const v1 = JSON.parse(localStorage.getItem("push2026_planner_v1")) || {};
+      ["goal","days","slots","predays","cph","bph"].forEach(f => { if (v1[f] !== undefined) saved[f] = v1[f]; });
+    } catch(e) {}
+  }
   P_FIELDS.forEach(f => {
     const el = document.getElementById("p_" + f);
     el.value = (saved[f] !== undefined && saved[f] !== null) ? saved[f] : P_DEFAULTS[f];
@@ -275,16 +323,42 @@ function pSave(vals){ try { localStorage.setItem(P_KEY, JSON.stringify(vals)); }
 
 function money(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
 function set(id, txt){ document.getElementById(id).textContent = txt; }
+function fmtPct(n){ return (n % 1 === 0) ? String(n) : String(Math.round(n * 10) / 10); }
 
-function pCalc(){
+function pVals(){
   const v = {};
   P_FIELDS.forEach(f => { v[f] = parseFloat(document.getElementById("p_" + f).value) || 0; });
+  const mid = (a, b) => (a + b) / 2;
+  const m = { comp: mid(v.comp_c, v.comp_x), close: mid(v.close_c, v.close_x), cpo: mid(v.cpo_c, v.cpo_x),
+              mari: mid(v.mari_c, v.mari_x), hunt: mid(v.hunt_c, v.hunt_x), promo: mid(v.promo_c, v.promo_x) };
+  const apptRev = (comp, close, cpo) => v.slots * comp / 100 * close / 100 * cpo;
+  const appt  = { c: apptRev(v.comp_c, v.close_c, v.cpo_c), m: apptRev(m.comp, m.close, m.cpo), x: apptRev(v.comp_x, v.close_x, v.cpo_x) };
+  const shift = { c: v.mari_c + v.hunt_c, m: m.mari + m.hunt, x: v.mari_x + v.hunt_x };
+  const promo = { c: v.promo_c, m: m.promo, x: v.promo_x };
+  const tot   = { c: appt.c + shift.c + promo.c, m: appt.m + shift.m + promo.m, x: appt.x + shift.x + promo.x };
+  return { v, m, appt, shift, promo, tot };
+}
+
+function pCalc(){
+  const { v, m, appt, shift, promo, tot } = pVals();
   pSave(v);
 
-  const apptGoal = Math.max(0, v.goal - v.shift - v.promo);
+  // auto middles in the lever table
+  set("m_comp", fmtPct(m.comp) + "%"); set("m_close", fmtPct(m.close) + "%"); set("m_cpo", money(m.cpo));
+  set("m_mari", money(m.mari)); set("m_hunt", money(m.hunt)); set("m_promo", money(m.promo));
+
+  // projected scenario table
+  ["c","m","x"].forEach(s => {
+    set("s_appt_" + s, money(appt[s])); set("s_shift_" + s, money(shift[s]));
+    set("s_promo_" + s, money(promo[s])); set("s_tot_" + s, money(tot[s]));
+  });
+
+  // goal-backwards math at middle levers
+  const apptGoal = Math.max(0, v.goal - shift.m - promo.m);
+  set("p_cover", money(shift.m + promo.m));
   set("p_apptgoal", money(apptGoal));
 
-  const ok = v.cpo > 0 && v.close > 0 && v.comp > 0 && v.days > 0 && v.cph > 0 && v.bph > 0 && v.predays > 0;
+  const ok = m.cpo > 0 && m.close > 0 && m.comp > 0 && v.days > 0 && v.cph > 0 && v.bph > 0 && v.predays > 0;
   if (!ok || apptGoal <= 0){
     ["r_orders","r_ordersday","r_completed","r_booked","r_apptsday","r_capacity",
      "r_calls","r_hours","r_precalls","r_prehours","r_pushcalls","r_pushhours",
@@ -292,9 +366,9 @@ function pCalc(){
     return;
   }
 
-  const orders = apptGoal / v.cpo;
-  const completed = orders / (v.close / 100);
-  const booked = completed / (v.comp / 100);
+  const orders = apptGoal / m.cpo;
+  const completed = orders / (m.close / 100);
+  const booked = completed / (m.comp / 100);
   const calls = booked * v.cph / v.bph;
   const preCalls = calls / 2;
   const pushCalls = calls - preCalls;
@@ -323,6 +397,46 @@ function pCalc(){
   set("r_pushhours", (pushCalls / v.cph).toFixed(1));
   set("r_precallsday", Math.ceil(preCalls / v.predays).toLocaleString("en-US"));
   set("r_prehoursday", (preCalls / v.predays / v.cph).toFixed(1));
+}
+
+function applyToBlueprint(){
+  if (!confirm("Overwrite the Blueprint tab's numbers with these scenario projections? Your hand-edits there will be replaced.")) return;
+  const { v, m, appt, shift, promo, tot } = pVals();
+  const put = (k, txt) => { const el = bpEl(k); if (el){ el.textContent = txt; bpData[k] = txt; } };
+
+  // engine table (cards + totals recompute from it)
+  put("e1n", "Appointments (" + v.slots + " slots)");
+  put("e1c", money(appt.c)); put("e1m", money(appt.m)); put("e1x", money(appt.x));
+  put("e2c", money(v.mari_c)); put("e2m", money(m.mari)); put("e2x", money(v.mari_x));
+  put("e3c", money(v.hunt_c)); put("e3m", money(m.hunt)); put("e3x", money(v.hunt_x));
+  put("e4c", money(v.promo_c)); put("e4m", money(m.promo)); put("e4x", money(v.promo_x));
+
+  // scenario card subtitles: completion / close / CPO
+  put("n1", fmtPct(v.comp_c) + "% / " + fmtPct(v.close_c) + "% / " + money(v.cpo_c));
+  put("n2", fmtPct(m.comp) + "% / " + fmtPct(m.close) + "% / " + money(m.cpo));
+  put("n3", fmtPct(v.comp_x) + "% / " + fmtPct(v.close_x) + "% / " + money(v.cpo_x));
+
+  // lever bullet text
+  put("lv1s", "% of your " + v.slots + " slots that actually run. " + fmtPct(v.comp_c) + "% → " + fmtPct(v.comp_x) + "%.");
+  put("lv2s", "% of run appointments that buy. " + fmtPct(v.close_c) + "% → " + fmtPct(v.close_x) + "%.");
+  put("lv3s", money(v.cpo_c) + " → " + money(v.cpo_x) + ".");
+
+  // live tracker targets = the middle case
+  const runM = v.slots * m.comp / 100, closedM = runM * m.close / 100;
+  put("t1n", "Slots run / " + v.slots);
+  put("t1t", String(Math.round(runM)));
+  put("t2t", fmtPct(m.comp) + "%");
+  put("t3t", String(Math.round(closedM)));
+  put("t4t", fmtPct(m.close) + "%");
+  put("t5t", money(m.cpo));
+  put("t6t", money(appt.m));
+  put("t7t", money(shift.m));
+  put("t8t", money(promo.m));
+  put("t9t", money(tot.m));
+
+  try { localStorage.setItem(BP_KEY, JSON.stringify(bpData)); } catch(e) {}
+  bpRecalc();
+  switchView("blueprint");
 }
 
 pLoad(); pCalc();
