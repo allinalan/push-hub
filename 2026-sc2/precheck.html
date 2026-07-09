@@ -124,62 +124,72 @@ const SEED = {
     ]},
   ],
   personal: [
-    { title: "Job 1: Defend the Anchors", items: [
-      ["Set up meal prep service account", ""],
-      ["Place first meal prep order (arrives before Day 1)", ""],
-      ["Buy emergency car protein (bars/shakes) — restock weekly", ""],
-      ["Configure BRICK + strip phone of all media/dopamine apps", ""],
-      ["Confirm morning routine locked: no phone, grounding (2m), breathwork (1m), visualization/priming (15m), Productivity Planner journaling (10m)", "Non-negotiable, full version."],
-      ["Confirm workout standard: full workout OR 20-min incline walk", ""],
-      ["Place ONE full day off/week on the calendar (wake +1hr, massage)", ""],
-      ["Book standing weekly massage for the day off", ""],
-      ["Confirm nutrition plan for stacked days — plan: ______", "Fill in your stacked-day plan."],
+    { title: "Finances", items: [
+      ["Bills paid", ""],
+      ["Anything due or renewing during the PUSH window handled or on autopay", "Nothing money-related should need a thought between Jul 16 and Aug 3."],
     ]},
-    { title: "Job 2: Clear the Deck (zero catch-up before Day 1)", items: [
+    { title: "Errands (Clear the Deck — zero catch-up before Day 1)", items: [
       ["Brain-dump every open personal loop onto one list", ""],
       ["Triage each into: DO before Day 1 / DELEGATE / DELETE-DEFER", ""],
       ["Handle all 'DO before Day 1' items — deck at zero", ""],
-      ["Pre-decide PUSH wardrobe (set outfits, laid out)", ""],
+      ["Tires changed — Tesla", ""],
+      ["House cleaning set up", ""],
+      ["Haircut scheduled", ""],
+      ["Groceries scheduled", ""],
       ["Automate/batch recurring errands (groceries, pharmacy, etc.)", ""],
+      ["Pre-decide PUSH wardrobe (set outfits, laid out)", ""],
+      ["Post job posting for Driver", ""],
       ["Personal delegation — Wife owns: ______", "Name it."],
       ["Personal delegation — Outsourced (cleaning/errands): ______", "Name it."],
       ["Personal delegation — Deferred past PUSH: ______", "Name it."],
-      ["Communicate every delegation OUT LOUD before Day 1", ""],
       ["Map known personal logistics during PUSH (appointments, family, events)", ""],
     ]},
-    { title: "Job 3: Protect the Relationship", items: [
-      ["Sit with wife — pre-book EVERY PUSH-period date night on shared calendar", ""],
-      ["Build a low-energy fallback for each date night (heavy-day version)", ""],
-      ["Define 'showing up for her on a heavy day' (15-min real check-in min)", ""],
+    { title: "Health", items: [
+      ["Set up meal prep service account", ""],
+      ["Place first meal prep order (arrives before Day 1)", ""],
+      ["Buy emergency car protein (bars/shakes) — restock weekly", ""],
+      ["Confirm nutrition plan for stacked days — plan: ______", "Fill in your stacked-day plan."],
+      ["Confirm workout standard: full workout OR 20-min incline walk", ""],
+      ["Place ONE full day off/week on the calendar (wake +1hr, massage)", ""],
+      ["Book standing weekly massage for the day off", ""],
     ]},
-    { title: "Schedule: The Container", items: [
-      ["Place anchors + day off on the grid FIRST", ""],
-      ["Place date nights SECOND", ""],
-      ["Build business schedule around them (not the reverse)", ""],
-    ]},
-    { title: "Personal Add-Ons (Do / Delegate / Delete / Defer)", items: [
-      ["Tires changed — Tesla", ""],
-      ["House cleaning set up", ""],
-      ["Bills paid", ""],
-      ["Haircut scheduled", ""],
-      ["Groceries scheduled", ""],
+    { title: "Mindset Prep", items: [
+      ["PUSH start date: 07/16/2026 ✓ LOCKED", "Everything keys off this — anchors and date nights go on the grid first."],
+      ["Configure BRICK + strip phone of all media/dopamine apps", ""],
       ["PS5 cable gone", ""],
       ["Steam Deck gone", ""],
-      ["Post job posting for Driver", ""],
-    ]},
-    { title: "Decisions to Lock (answer to close prep)", items: [
-      ["PUSH start date: 07/16/2026 ✓ LOCKED", "Everything keys off this — anchors and date nights go on the grid first."],
-      ["Nutrition-on-stacked-days plan: ______", ""],
+      ["Confirm morning routine locked: no phone, grounding (2m), breathwork (1m), visualization/priming (15m), Productivity Planner journaling (10m)", "Non-negotiable, full version."],
       ["Meal prep + BRICK completion dates: ______", ""],
+      ["Place anchors + day off on the grid FIRST", ""],
+      ["Build business schedule around anchors and date nights (not the reverse)", "The container: anchors first, date nights second, business fills the rest."],
+    ]},
+    { title: "Relationships", items: [
+      ["Sit with wife — pre-book EVERY PUSH-period date night on shared calendar", ""],
+      ["Place date nights on the grid SECOND (right after anchors)", ""],
+      ["Build a low-energy fallback for each date night (heavy-day version)", ""],
+      ["Define 'showing up for her on a heavy day' (15-min real check-in min)", ""],
+      ["Communicate every delegation OUT LOUD before Day 1", ""],
     ]},
   ],
 };
+const SEED_V = 3;
 
 let model, active = "pro";
 function load() {
   try { model = JSON.parse(localStorage.getItem(KEY)); } catch(e) { model = null; }
   if (!model || !model.pro || !model.personal) {
-    model = { pro: seed(SEED.pro), personal: seed(SEED.personal) };
+    model = { pro: seed(SEED.pro), personal: seed(SEED.personal), v: SEED_V };
+    save();
+  } else if (model.v !== SEED_V) {
+    // Personal tab was re-bucketed: rebuild it from the new seed, carrying
+    // over checked state and notes for items whose text still matches.
+    const old = {};
+    model.personal.forEach(s => s.items.forEach(i => { old[i.text] = i; }));
+    model.personal = seed(SEED.personal).map(s => ({
+      title: s.title,
+      items: s.items.map(i => old[i.text] ? { text: i.text, hint: old[i.text].hint || i.hint, done: !!old[i.text].done } : i)
+    }));
+    model.v = SEED_V;
     save();
   }
 }
