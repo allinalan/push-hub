@@ -46,6 +46,26 @@
   .track td { height: 34px; }
   .fill { color: #4b5563; font-style: italic; }
 
+  .tabs { display: flex; gap: 8px; justify-content: center; margin: 18px 0 4px; }
+  .tab { background: #1a1d24; border: 1px solid #2a2e38; color: #9aa0a6; padding: 10px 24px;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .tab.active { color: #0f1115; background: #f5b301; border-color: #f5b301; }
+  .hidden { display: none; }
+
+  .panel { background: #1a1d24; border: 1px solid #2a2e38; border-radius: 10px; padding: 16px 20px; }
+  .igrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .igrid label { display: block; font-size: 12px; color: #9aa0a6; text-transform: uppercase; letter-spacing: 0.5px; }
+  .igrid input { width: 100%; margin-top: 5px; background: #0f1115; border: 1px solid #2a2e38; color: #e8eaed;
+    border-radius: 8px; padding: 9px 11px; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .igrid input:focus { outline: none; border-color: #f5b301; }
+  .derived { margin-top: 14px; padding-top: 12px; border-top: 1px solid #2a2e38; font-size: 14px; color: #9aa0a6; }
+  .derived b { color: #f5b301; font-size: 18px; }
+  .res b { color: #e8eaed; }
+  .big { color: #34c759 !important; font-size: 16px; }
+  .capacity-ok { color: #34c759; font-weight: 600; }
+  .capacity-over { color: #ff6b6b; font-weight: 600; }
+  .pnote { font-size: 12px; color: #6b7280; margin-top: 8px; }
+
   footer { text-align: center; color: #6b7280; font-size: 12px; margin-top: 30px; }
   @media (max-width: 640px) { .scenarios { grid-template-columns: 1fr; } }
 </style>
@@ -58,6 +78,12 @@
     <div class="sub">PUSH Window: <span class="window">July 16 – August 3, 2026</span> · 94 SC Appt Slots</div>
   </header>
 
+  <div class="tabs">
+    <button class="tab active" data-view="blueprint" onclick="switchView('blueprint')">Blueprint</button>
+    <button class="tab" data-view="planner" onclick="switchView('planner')">Planner</button>
+  </div>
+
+  <div id="view-blueprint">
   <div class="scenarios">
     <div class="card floor">
       <div class="label">Conservative Floor</div>
@@ -156,8 +182,138 @@
       <tr><td><b>TOTAL SHIPPED</b></td><td class="num"><b>$103,071</b></td><td class="num fill">___</td></tr>
     </tbody>
   </table>
+  </div><!-- /view-blueprint -->
+
+  <div id="view-planner" class="hidden">
+    <h2>The Goal</h2>
+    <div class="panel">
+      <div class="igrid">
+        <label>Total PUSH Goal ($)<input id="p_goal" type="number" inputmode="decimal" min="0" step="1000"></label>
+        <label>Shift Revenue ($)<input id="p_shift" type="number" inputmode="decimal" min="0" step="500"></label>
+        <label>Promo Revenue ($)<input id="p_promo" type="number" inputmode="decimal" min="0" step="500"></label>
+      </div>
+      <div class="derived">Appointment Goal (what appointments must produce): <b id="p_apptgoal">—</b></div>
+    </div>
+
+    <h2>The Levers</h2>
+    <div class="panel">
+      <div class="igrid">
+        <label>Average Order / CPO ($)<input id="p_cpo" type="number" inputmode="decimal" min="1" step="25"></label>
+        <label>Closing Ratio (%)<input id="p_close" type="number" inputmode="decimal" min="1" max="100" step="0.5"></label>
+        <label>Completion Ratio (%)<input id="p_comp" type="number" inputmode="decimal" min="1" max="100" step="0.5"></label>
+        <label>Days Working<input id="p_days" type="number" inputmode="numeric" min="1" step="1"></label>
+        <label>SC Appt Slots Available<input id="p_slots" type="number" inputmode="numeric" min="0" step="1"></label>
+        <label>Pre-PUSH Call Days<input id="p_predays" type="number" inputmode="numeric" min="1" step="1"></label>
+        <label>Calls / Hour<input id="p_cph" type="number" inputmode="decimal" min="1" step="1"></label>
+        <label>Booked / Hour<input id="p_bph" type="number" inputmode="decimal" min="0.1" step="0.5"></label>
+      </div>
+    </div>
+
+    <h2>The Math</h2>
+    <table class="res">
+      <tbody>
+        <tr><td>Orders Needed</td><td class="num"><b id="r_orders">—</b></td></tr>
+        <tr><td>Orders / Day</td><td class="num" id="r_ordersday">—</td></tr>
+        <tr><td>Appts Completed Needed</td><td class="num"><b id="r_completed">—</b></td></tr>
+        <tr><td>Appts Booked Needed</td><td class="num"><b class="big" id="r_booked">—</b></td></tr>
+        <tr><td>Appts / Day (booked)</td><td class="num" id="r_apptsday">—</td></tr>
+        <tr><td>Capacity Check</td><td class="num" id="r_capacity">—</td></tr>
+      </tbody>
+    </table>
+
+    <h2>The Call Plan</h2>
+    <table class="res">
+      <thead>
+        <tr><th></th><th class="num">Calls</th><th class="num">Hours on the Phone</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Total Calls Needed</td><td class="num"><b id="r_calls">—</b></td><td class="num" id="r_hours">—</td></tr>
+        <tr><td>Pre-PUSH Calls (book half before Day 1)</td><td class="num" id="r_precalls">—</td><td class="num" id="r_prehours">—</td></tr>
+        <tr><td>PUSH Calls (book the rest live)</td><td class="num" id="r_pushcalls">—</td><td class="num" id="r_pushhours">—</td></tr>
+        <tr><td>Pre-PUSH Calls / Day</td><td class="num"><b id="r_precallsday">—</b></td><td class="num" id="r_prehoursday">—</td></tr>
+      </tbody>
+    </table>
+    <div class="pnote">Same math as the PUSH Planner sheet: Orders = Goal ÷ CPO · Completed = Orders ÷ Close% · Booked = Completed ÷ Completion% · Calls = Booked × Calls/hr ÷ Booked/hr, half of them made pre-PUSH. Your inputs save automatically on this device.</div>
+  </div><!-- /view-planner -->
 
   <footer>Unwavering faith and extraordinary effort until the final second. · Built for the 2026 SC2 100K+ PUSH</footer>
 </div>
+
+<script>
+const P_KEY = "push2026_planner_v1";
+const P_DEFAULTS = { goal: 100000, shift: 16500, promo: 20000, cpo: 925, close: 87.5, comp: 87.5, days: 15, slots: 94, predays: 4, cph: 25, bph: 2 };
+const P_FIELDS = Object.keys(P_DEFAULTS);
+
+function switchView(v){
+  document.querySelectorAll(".tab").forEach(el => el.classList.toggle("active", el.dataset.view === v));
+  document.getElementById("view-blueprint").classList.toggle("hidden", v !== "blueprint");
+  document.getElementById("view-planner").classList.toggle("hidden", v !== "planner");
+}
+
+function pLoad(){
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(P_KEY)) || {}; } catch(e) {}
+  P_FIELDS.forEach(f => {
+    const el = document.getElementById("p_" + f);
+    el.value = (saved[f] !== undefined && saved[f] !== null) ? saved[f] : P_DEFAULTS[f];
+    el.addEventListener("input", pCalc);
+  });
+}
+function pSave(vals){ try { localStorage.setItem(P_KEY, JSON.stringify(vals)); } catch(e) {} }
+
+function money(n){ return "$" + Math.round(n).toLocaleString("en-US"); }
+function set(id, txt){ document.getElementById(id).textContent = txt; }
+
+function pCalc(){
+  const v = {};
+  P_FIELDS.forEach(f => { v[f] = parseFloat(document.getElementById("p_" + f).value) || 0; });
+  pSave(v);
+
+  const apptGoal = Math.max(0, v.goal - v.shift - v.promo);
+  set("p_apptgoal", money(apptGoal));
+
+  const ok = v.cpo > 0 && v.close > 0 && v.comp > 0 && v.days > 0 && v.cph > 0 && v.bph > 0 && v.predays > 0;
+  if (!ok || apptGoal <= 0){
+    ["r_orders","r_ordersday","r_completed","r_booked","r_apptsday","r_capacity",
+     "r_calls","r_hours","r_precalls","r_prehours","r_pushcalls","r_pushhours",
+     "r_precallsday","r_prehoursday"].forEach(id => set(id, "—"));
+    return;
+  }
+
+  const orders = apptGoal / v.cpo;
+  const completed = orders / (v.close / 100);
+  const booked = completed / (v.comp / 100);
+  const calls = booked * v.cph / v.bph;
+  const preCalls = calls / 2;
+  const pushCalls = calls - preCalls;
+
+  set("r_orders", Math.ceil(orders) + "  (" + orders.toFixed(1) + ")");
+  set("r_ordersday", (orders / v.days).toFixed(1));
+  set("r_completed", Math.ceil(completed) + "  (" + completed.toFixed(1) + ")");
+  set("r_booked", Math.ceil(booked) + "  (" + booked.toFixed(1) + ")");
+  set("r_apptsday", (booked / v.days).toFixed(1));
+
+  const cap = document.getElementById("r_capacity");
+  const need = Math.ceil(booked);
+  if (v.slots >= need){
+    cap.textContent = need + " needed · " + v.slots + " available ✓";
+    cap.className = "num capacity-ok";
+  } else {
+    cap.textContent = need + " needed · only " + v.slots + " available — short " + (need - v.slots);
+    cap.className = "num capacity-over";
+  }
+
+  set("r_calls", Math.ceil(calls).toLocaleString("en-US"));
+  set("r_hours", (calls / v.cph).toFixed(1));
+  set("r_precalls", Math.ceil(preCalls).toLocaleString("en-US"));
+  set("r_prehours", (preCalls / v.cph).toFixed(1));
+  set("r_pushcalls", Math.ceil(pushCalls).toLocaleString("en-US"));
+  set("r_pushhours", (pushCalls / v.cph).toFixed(1));
+  set("r_precallsday", Math.ceil(preCalls / v.predays).toLocaleString("en-US"));
+  set("r_prehoursday", (preCalls / v.predays / v.cph).toFixed(1));
+}
+
+pLoad(); pCalc();
+</script>
 </body>
 </html>
