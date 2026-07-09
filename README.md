@@ -9,10 +9,19 @@ dependencies), all linked from the landing page (`index.html`).
 push-hub/
 ├── index.html        ← landing page listing every PUSH
 ├── 2026-sc2/         ← one folder per PUSH
-│   ├── blueprint.html
+│   ├── blueprint.html      ← Alan's blueprint + planner
+│   ├── rep-blueprint.html  ← team version: ONE link for all reps
 │   └── precheck.html
 └── README.md         ← this playbook
 ```
+
+**Rep edition:** `rep-blueprint.html` is a single shared page for the whole
+team. All data (name, levers, tracker) lives in each rep's own browser
+(localStorage), so every rep who opens the link gets their own private
+blueprint — no per-rep files needed. Note: localStorage is shared across
+this whole GitHub Pages site, so each page's storage keys must be unique
+(the rep page uses `push2026_rep_*` keys; keep keys year-scoped when
+copying to a new PUSH folder).
 
 > **Heads up:** this repo is public and the live site is world-readable.
 > Don't commit anything you wouldn't want indexed by Google.
